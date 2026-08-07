@@ -23,7 +23,8 @@ body{font-family:var(--font);background:var(--bg);color:#f1f0ff;min-height:100vh
 .account-card:hover{transform:translateY(-6px) scale(1.03)}
 #nooniCard:hover{border-color:var(--nooni);box-shadow:0 0 30px rgba(244,114,182,.3)}
 #labubuCard:hover{border-color:var(--labubu);box-shadow:0 0 30px rgba(167,139,250,.3)}
-.acc-avatar{width:88px;height:88px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:44px;border:3px solid transparent}
+.acc-avatar{width:88px;height:88px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:44px;border:3px solid transparent}
+.acc-avatar img{width:100%;height:100%;object-fit:cover}
 .nooni-av{border-color:var(--nooni);background:rgba(244,114,182,.12)}
 .labubu-av{border-color:var(--labubu);background:rgba(167,139,250,.12)}
 .acc-name{font-size:20px;font-weight:700}
@@ -36,7 +37,8 @@ body{font-family:var(--font);background:var(--bg);color:#f1f0ff;min-height:100vh
 .logout-btn:hover{background:rgba(255,255,255,.15)}
 .hdr-other{display:flex;align-items:center;gap:10px;flex:1}
 .hdr-av-wrap{position:relative}
-.hdr-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;border:2px solid rgba(255,255,255,.2)}
+.hdr-av{width:40px;height:40px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:22px;border:2px solid rgba(255,255,255,.2)}
+.hdr-av img{width:100%;height:100%;object-fit:cover}
 .online-dot{position:absolute;bottom:1px;right:1px;width:10px;height:10px;border-radius:50%;background:#22c55e;border:2px solid var(--bg);animation:pulseGreen 2s infinite}
 .hdr-name{display:block;font-weight:700;font-size:16px}
 .hdr-status{display:block;font-size:12px;color:#22c55e}
@@ -51,7 +53,8 @@ body{font-family:var(--font);background:var(--bg);color:#f1f0ff;min-height:100vh
 .msg-row{display:flex;align-items:flex-end;gap:7px;max-width:78%;animation:msgIn .3s cubic-bezier(.4,2,.6,1) both}
 .msg-row.me{flex-direction:row-reverse;margin-right:auto}
 .msg-row.other{flex-direction:row;margin-left:auto}
-.msg-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;border:1px solid rgba(255,255,255,.15)}
+.msg-av{width:28px;height:28px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;border:1px solid rgba(255,255,255,.15)}
+.msg-av img{width:100%;height:100%;object-fit:cover}
 .bubble{max-width:100%;padding:9px 13px;border-radius:18px;font-size:15px;line-height:1.5;word-break:break-word}
 .me .bubble{background:linear-gradient(135deg,#7c3aed,#4f46e5);border-bottom-right-radius:4px;box-shadow:0 4px 15px rgba(124,58,237,.4)}
 .other .bubble{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.1);border-bottom-left-radius:4px;backdrop-filter:blur(10px)}
@@ -132,12 +135,12 @@ body{font-family:var(--font);background:var(--bg);color:#f1f0ff;min-height:100vh
   </div>
   <div class="accounts-grid">
     <div class="account-card" id="nooniCard" onclick="selectAcc('nooni')">
-      <div class="acc-avatar nooni-av">🌸</div>
+      <div class="acc-avatar nooni-av"><img src="nooni.jpg" alt="نوني" onerror="this.style.display='none'"/></div>
       <span class="acc-name">نوني</span>
       <span class="acc-tag">@nooni</span>
     </div>
     <div class="account-card" id="labubuCard" onclick="selectAcc('labubu')">
-      <div class="acc-avatar labubu-av">🐾</div>
+      <div class="acc-avatar labubu-av"><img src="labubu.jpg" alt="لابوبو" onerror="this.style.display='none'"/></div>
       <span class="acc-name">لابوبو</span>
       <span class="acc-tag">@labubu</span>
     </div>
@@ -204,8 +207,8 @@ body{font-family:var(--font);background:var(--bg);color:#f1f0ff;min-height:100vh
 
 <script>
 const USERS = {
-  nooni:  { id:'nooni',  name:'نوني',   emoji:'🌸', color:'#f472b6' },
-  labubu: { id:'labubu', name:'لابوبو', emoji:'🐾', color:'#a78bfa' }
+  nooni:  { id:'nooni',  name:'نوني',   emoji:'🌸', img:'nooni.jpg',  color:'#f472b6' },
+  labubu: { id:'labubu', name:'لابوبو', emoji:'🐾', img:'labubu.jpg', color:'#a78bfa' }
 };
 
 let me=null, other=null;
@@ -224,7 +227,7 @@ function loginAs(id) {
   me    = USERS[id];
   other = USERS[id==='nooni' ? 'labubu' : 'nooni'];
   document.getElementById('hdrName').textContent = other.name;
-  document.getElementById('hdrAv').textContent   = other.emoji;
+  document.getElementById('hdrAv').innerHTML = `<img src="${other.img}" alt="${other.name}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`;
   document.getElementById('hdrAv').style.background  = `radial-gradient(circle,${other.color}33,transparent)`;
   document.getElementById('hdrAv').style.borderColor = other.color;
   document.getElementById('curBadge').textContent    = me.name+' '+me.emoji;
@@ -354,7 +357,8 @@ function renderOne(m, anim){
   if(!anim) row.style.animation='none';
 
   const av=document.createElement('div');
-  av.className='msg-av'; av.textContent=u.emoji;
+  av.className='msg-av';
+  av.innerHTML=`<img src="${u.img}" alt="${u.name}" style="width:100%;height:100%;object-fit:cover" onerror="this.outerHTML='${u.emoji}'">`;
   av.style.background=`radial-gradient(circle,${u.color}33,transparent)`;
   av.style.borderColor=u.color;
 
